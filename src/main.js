@@ -1,12 +1,19 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import VueRouter from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
-const routes = [{ path: "/", component: HelloWorld }];
-const router = VueRouter.createRouter({
-  // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
-  history: VueRouter.createWebHashHistory(),
+import { createApp } from "vue/dist/vue.esm-bundler.js";
+import {createRouter, createWebHistory} from "vue-router";
+import Home from "./views/Home.vue";
+import App from "./App.vue"
+const routes = [{ path: "/",name:"Home", component: Home }];
+const router = createRouter({
+  history:createWebHistory(),
   routes, // short for `routes: routes`
 });
 
-createApp(App).use(router).mount("#app");
+router.beforeEach((to,from,next)=>{
+  document.title = to.name?? "High Tech";
+  
+  next();
+})
+const app = createApp(App)
+
+app.use(router)
+app.mount("#app");
