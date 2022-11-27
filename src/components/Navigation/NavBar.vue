@@ -1,58 +1,72 @@
 <template>
     <div id="nav">
-<div class="hamburger show-sidebar">
+<div @click="onHamburgerClick" class="hamburger show-sidebar">
     <HamburgerIcon/>
 </div>
 
 <div class="nav-start">
-    <a class='icon-title' href="index.html">
+    <router-link class='icon-title' to="/">
         <div class='nav-logo'>
             <LogoIcon/>
         </div>
         <div class="nav-title">HIGH TECH</div>
-    </a>
+    </router-link>
 
     <div class="nav-items">
-        <a id='shop-item' href="./shop.html" class="nav-item">
+        <router-link to="/shop" class="nav-item">
             <div>Shop</div>
             <!--${bagIcon}-->
-        </a>
-        <a href='#footer-start' id='support' class="nav-item">
+        </router-link>
+        <div class="nav-item">
             <div>Support</div>
             <!--${supportIcon}-->
-        </a>
+        </div>
     </div>
 </div>
 
 <div class="nav-end">
 
-    <form class='search-form' action="./search.html">
-        <input class='search-input hidden' name='search' placeholder='Search products'/>
+    <form class='search-form' action="/search">
+        <input v-show="toggleSearch" class="search-input" name='search' placeholder='Search products'/>
     </form>
 
-    <div class="search-item">
+    <div @click="onSearchClick" class="search-item">
       <SearchIcon/>
     </div>
 
     <div class="profile icon-item">
         <ProfileIcon/>
     <div id='account' class='account-navbar'>
-        <div id="account-items-nav" class="account-items-nav">
-            <a class='account-icon login' href="./login.html?returnUrl=${returnUrl}">
-                <LoginIcon/>
-                <div>Log In</div>
-            </a>
-            <a class='account-icon register' href="./register.html">
-               <RegisterIcon/>
-                <div>Register</div>
-            </a>
+        <div v-if="user" class="account-items-nav">
+            <account-item to="profile">
+                <template v-slot:icon><ProfileIcon/></template>
+                Account
+            </account-item>
+            <account-item to='administration'>
+                <template v-slot:icon><AdminIcon/></template>
+                Admin
+            </account-item>
+            <account-item @click="onLogout">
+                <template v-slot:icon><LogoutIcon/></template>
+                Log out
+            </account-item>
+        </div>
+        <div v-else class="account-items-nav">
+            <account-item to='login'>
+                <template v-slot:icon><LoginIcon/></template>
+                Login
+            </account-item>
+            <account-item to='register'>
+                <template v-slot:icon><RegisterIcon/></template>
+                Register
+            </account-item>
         </div>
     </div>
     </div>
-    <a href="./cart.html" class="cart icon-item">
+    <router-link class="cart icon-item" to="cart">
         <CartIcon/>
         <div class='cart-count hidden'>0</div>
-    </a>
+    </router-link>
 </div>
 </div>
 </template>
@@ -65,8 +79,25 @@ import LogoIcon from '../Icons/LogoIcon.vue';
 import ProfileIcon from '../Icons/ProfileIcon.vue';
 import RegisterIcon from '../Icons/RegisterIcon.vue';
 import SearchIcon from '../Icons/SearchIcon.vue';
+import AccountItem from './AccountItem.vue';
+import AdminIcon from '../Icons/AdminIcon.vue';
+import LogoutIcon from '../Icons/LogoutIcon.vue';
 
 export default {
+    data(){
+        return{
+            toggleSearch:false
+        }
+    },
+    props:{
+        onHamburgerClick:Function,
+        user:Object
+    },
+    methods:{
+        onSearchClick(){
+            this.toggleSearch=!this.toggleSearch
+        }
+    },
     components:{
     CartIcon,
     RegisterIcon,
@@ -74,7 +105,10 @@ export default {
     ProfileIcon,
     SearchIcon,
     LogoIcon,
-    HamburgerIcon
+    HamburgerIcon,
+    AccountItem,
+    AdminIcon,
+    LogoutIcon
 }
 }
 </script>
@@ -216,22 +250,6 @@ export default {
     }
 }
 
-.account-icon {
-    color: #050401;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 1rem 1.6rem;
-}
-
-.account-icon>a {
-    transition: all 0.12s ease-in-out;
-}
-
-.account-icon:hover {
-    background: #050401;
-    color: #FFFAFF;
-}
 
 .account-navbar {
     position: absolute;
@@ -262,10 +280,6 @@ export default {
 
 .register:hover>svg {
     transform: scale(110%)
-}
-
-.account-navbar a {
-    color: #050401;
 }
 
 .profile {

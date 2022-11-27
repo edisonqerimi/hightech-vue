@@ -3,12 +3,14 @@
     <div>
       <header class="app-header">
         <app-nav></app-nav>
-        <app-banner></app-banner>
+        <app-banner v-if="isBannerOpen" :onClose="onBannerClose"></app-banner>
       </header>
       <main class="container container-height">
         <router-view></router-view>
       </main>
+      <footer>
       <app-footer></app-footer>
+    </footer>
     </div>
   </template>
   
@@ -17,6 +19,20 @@
   import AppBanner from "./components/AppBanner.vue"
   import AppFooter from './components/AppFooter.vue';
   export default {
+    created() {
+        this.isBannerOpen=!JSON.parse(sessionStorage.getItem("bannerHidden"))
+    },
+    data(){
+        return{
+            isBannerOpen:true
+        }
+    },  
+    methods:{
+        onBannerClose(){
+            this.isBannerOpen = false;
+            sessionStorage.setItem("bannerHidden",true);
+        }
+    },
     components: {
       AppNav,
       AppBanner,

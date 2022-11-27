@@ -4,7 +4,7 @@
     <div></div> 
 
     <div>Free domestic shipping.</div>
-    <div class="close-banner">
+    <div class="close-banner" @click="onClose">
         <CloseIcon/>
     </div>
     </div>
@@ -15,6 +15,9 @@ import CloseIcon from './Icons/CloseIcon.vue';
 
 
     export default {
+        props:{
+            onClose:Function
+        },
         components:{
     CloseIcon
 }

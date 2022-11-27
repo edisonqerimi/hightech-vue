@@ -1,78 +1,95 @@
 <template>
-    <div id="sidebar">
-    <div class='close'>
+    <div class="sidebar">
+    <div class='close' @click="onClose">
         <CloseIcon/>
     </div>
     <div class="side-title-container">
-        <a class='side-title' href="index.html">
+        <router-link class='side-title' to="/">
             <div class='nav-logo'>
                 <LogoIcon/>
             </div>
             <div>HIGH TECH</div>
-        </a>
+        </router-link>
     </div>
     <form class='side-form search-form' action="./search.html">
         <input class='search-input side-search' name='search' placeholder='Search products'/>
     </form>
-    <div id='account-side' class="account-items">
-        <div id='account-items-side' class="account-items-side">
-            <a class='account-icon' href="./login.html?returnUrl=${returnUrl}">
-                <LoginIcon/>
-                <div>Log In</div>
-            </a>
-            <a class='account-icon' href="./register.html">
-                <RegisterIcon/>
-                <div>Register</div>
-            </a>
+    <div>
+        <div class="account-items-side" v-if="user">
+                    <account-item to="profile">
+                        <template v-slot:icon><ProfileIcon/></template>
+                        Account
+                    </account-item>
+                    <account-item to='administration'>
+                        <template v-slot:icon><AdminIcon/></template>
+                        Admin
+                    </account-item>
+                    <account-item @click="onLogout">
+                        <template v-slot:icon><LogoutIcon/></template>
+                        Log out
+                    </account-item>
+        </div>
+        <div class="account-items-side" v-else>
+            <account-item to='login'>
+                <template v-slot:icon><LoginIcon/></template>
+                Login
+            </account-item>
+            <account-item to='register'>
+                <template v-slot:icon><RegisterIcon/></template>
+                Register
+            </account-item>
         </div>
     </div>
     <div class="side-items">
-        <a href="./shop.html" class="item-1 side-row">
-            <div class="side-item">All categories</div>
-        </a>
-
-        <a href="./desktops.html" class="item-2 side-row">
-            <div class="side-item">Desktops</div>
-        </a>
-
-        <a href="./laptop.html" class="item-2 side-row">
-            <div class="side-item">Laptops</div>
-        </a>
-
-        <a href="./smartphone.html" class="item-3 side-row">
-            <div class="side-item">Smartphones</div>
-        </a>
-
-        <a href="./accessories.html" class="item-3 side-row">
-            <div class="side-item">Accessories</div>
-        </a>
-        <a href="#footer-start" class="item-3 side-row">
-            <div class="side-item">Support</div>
-        </a>
+            <side-item to="shop">All categories</side-item>
+            <side-item to="desktop">Desktops</side-item>
+            <side-item to="laptop">Laptops</side-item>
+            <side-item to="smartphone">Smartphones</side-item>
+            <side-item to="accessories">Accessories</side-item>
+            <side-item to="#footer-start">Support</side-item>
     </div>
 </div>
 </template>
 
 <script>
+import AdminIcon from '../Icons/AdminIcon.vue';
 import CloseIcon from '../Icons/CloseIcon.vue';
 import LoginIcon from '../Icons/LoginIcon.vue';
 import LogoIcon from '../Icons/LogoIcon.vue';
+import ProfileIcon from '../Icons/ProfileIcon.vue';
 import RegisterIcon from '../Icons/RegisterIcon.vue';
+import LogoutIcon from '../Icons/LogoutIcon.vue';
+import SideItem from './SideItem.vue';
+import AccountItem from './AccountItem.vue';
 
 
 export default {
+   
+    props:{
+        onClose:Function,
+        user:Object
+    },
+    methods:{
+        onLogout(e){
+            console.log(e)
+        }
+    },
     components:{
     RegisterIcon,
     LoginIcon,
     LogoIcon,
-    CloseIcon
+    CloseIcon,
+    SideItem,
+    ProfileIcon,
+    AdminIcon,
+    LogoutIcon,
+    AccountItem
 }
 }
 </script>
 
 <style scoped>
-#sidebar {
-    display: none;
+.sidebar {
     top: 0;
     background: #FFFAFF;
     left: 0;
@@ -161,16 +178,5 @@ export default {
     font-weight: 600;
 }
 
-.side-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem;
-    text-transform: uppercase;
-    color: #050401;
-}
 
-
-.side-row:hover {
-    color: #464542;
-}
 </style>
