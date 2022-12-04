@@ -3,10 +3,30 @@
         <div class="featured-in container">
             <h1 class="section-title">Featured</h1>
             <div class="featured-items">
-               <featured-item to="/laptop" :image="require('../../assets/images/laptop.jpg')">Laptop</featured-item>
-               <featured-item to="/smartphone" :image="require('../../assets/images/smartphone.jpg')">Laptop</featured-item>
-               <featured-item to="/desktop" :image="require('../../assets/images/desktop.jpg')">Laptop</featured-item>
-               <featured-item to="/accessory" :image="require('../../assets/images/accessory.jpg')">Laptop</featured-item>
+               <featured-item 
+                    to="/laptop" 
+                    :image="require('../../assets/images/laptop.jpg')"
+                >
+                    Laptops
+                </featured-item>
+               <featured-item 
+                    to="/smartphone" 
+                    :image="require('../../assets/images/smartphone.jpg')"
+                >
+                    Smartphones
+                </featured-item>
+               <featured-item 
+                    to="/desktop" 
+                    :image="require('../../assets/images/desktop.jpg')"
+                >
+                    Desktops
+                </featured-item>
+               <featured-item 
+                    to="/accessory" 
+                    :image="require('../../assets/images/accessory.jpg')"
+                >
+                    Accessories
+                </featured-item>
             </div>
             <router-link to="/shop" class="btn login-button">See all</router-link>
         </div>

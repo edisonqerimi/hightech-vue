@@ -6,7 +6,7 @@
                 <div class="cmimi">
                     <span>
                         {{discountPrice}}
-                        &euro;</span>
+                        &euro;</span>{{" "}}
                     <span class="cmimi-normal">{{normalPrice}}&euro;</span>
                 </div>
             </div>
@@ -32,13 +32,11 @@ export default {
 .cmimi {
     font-size: 1.8rem;
 }
-.cmimi .cmimi-normal {
-    font-size: 1.6rem;
-}
 
 .cmimi-normal{
     text-decoration: line-through;
     color: #362417;
+    font-size: 1.6rem;
 }
 .img-holder {
     position: absolute;
