@@ -5,7 +5,7 @@
         <app-nav></app-nav>
         <app-banner v-if="isBannerOpen" :onClose="onBannerClose"></app-banner>
       </header>
-      <main class="container container-height">
+      <main class="container-height">
         <router-view></router-view>
       </main>
       <footer>
@@ -217,7 +217,22 @@ a {
     font-weight: 500;
 }
 
+.login-button {
+    font-size: larger;
+    border-radius: 2px;
+    text-transform: uppercase;
+    padding: 0.8rem 2.4rem;
+    background: transparent;
+    color: #050401;
+    border: 2px solid #050401;
+}
+.login-button:hover {
+    background-color: #cfcbcf;
+}
 
+.login-button:active {
+    background-color: #b8b4b8;
+}
 </style>
 
 
