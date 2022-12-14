@@ -10,24 +10,59 @@
         >Smartphones</router-link
       >
       <router-link to="/shop/accessory" class="category category-hidden">
-        Accessory
+        Accessories
       </router-link>
       <div class="category category-more show-sidebar">MORE</div>
     </div>
     <div class="product-filter shop-grid-item">
       <div class="filter-head">
         <div class="filter-title">Product Filter</div>
-        <LeftArrow />
+        <LeftArrow class="filter-icon" />
       </div>
       <div class="filter-body">
         <div class="filter-price">
           <div>Price</div>
           <div class="price-label">
-            <div class="min-price">min</div>
-            <div class="output-price">max</div>
+            <div class="min-price">{{ minPrice }}</div>
+            <div class="output-price">{{ outputPrice }}</div>
           </div>
           <div class="price-io">
-            <input step="10" type="range" id="price-Input" />
+            <input
+              :min="minPrice"
+              :max="maxPrice"
+              :value="outputPrice"
+              step="1"
+              type="range"
+              id="price-Input"
+              @change="onPriceRangeChange"
+            />
+          </div>
+        </div>
+        <div class="filter">
+          <div
+            class="filter-item-container"
+            v-for="filter in filters"
+            v-bind:key="filter.id"
+          >
+            <div class="filter-header" @click="onFilterHeaderClick(filter.id)">
+              <div class="filter-name">{{ filter.name }}</div>
+              <LeftArrow />
+            </div>
+            <div
+              v-show="!filter.hidden"
+              v-for="value in filter.values"
+              v-bind:key="value"
+              class="filter-items"
+            >
+              <label :for="value" class="filter-item"
+                >{{ value }}
+                <input
+                  :id="value"
+                  type="checkbox"
+                  @change="onFilterChange({ value, filterBy: filter.name })"
+                  class="filter-check"
+              /></label>
+            </div>
           </div>
         </div>
       </div>
@@ -49,7 +84,7 @@
       </div>
       <div class="products">
         <product-card
-          v-for="product in filteredProducts"
+          v-for="product in productsFiltered"
           :product="product"
           v-bind:key="product.id"
         />
@@ -66,22 +101,120 @@ export default {
   data() {
     return {
       products,
-      filteredProducts: products,
+      productsFilteredByCategory: products,
+      productsFiltered: [],
+      filterData: [],
+      minPrice: 0,
+      maxPrice: 0,
+      outputPrice: 0,
+      filters: [
+        {
+          id: 1,
+          name: "color",
+          values: [...new Set(products.map(({ color }) => color))],
+        },
+        {
+          id: 2,
+          name: "brand",
+          values: [...new Set(products.map(({ brand }) => brand))],
+        },
+      ],
     };
   },
   created() {
+    const categoryParam = this.$route.params.category;
+    let prices = [];
+    if (categoryParam) {
+      const productsFilteredByCategory = this.products.filter(({ category }) =>
+        category
+          .toLowerCase()
+          .includes(this.$route.params.category?.toLowerCase())
+      );
+      prices = productsFilteredByCategory.map((item) =>
+        item.discount ? item.discount.priceDiscount : item.price
+      );
+      this.productsFilteredByCategory = productsFilteredByCategory;
+      this.productsFiltered = productsFilteredByCategory;
+    } else {
+      prices = this.products.map((item) =>
+        item.discount ? item.discount.priceDiscount : item.price
+      );
+      this.productsFilteredByCategory = this.products;
+      this.productsFiltered = this.products;
+    }
+    this.prices = prices;
+    this.minPrice = Math.min(...this.prices);
+    this.maxPrice = Math.max(...this.prices);
+    this.outputPrice = Math.max(...this.prices);
     this.$watch(
       () => this.$route.params,
       (toParams) => {
+        let prices = [];
         if (toParams.category) {
-          this.filteredProducts = this.products.filter(({ category }) =>
-            category.toLowerCase().includes(toParams.category.toLowerCase())
+          // document.title = toParams.category.toUpperCase();
+          const productsFilteredByCategory = this.products.filter(
+            ({ category }) =>
+              category.toLowerCase().includes(toParams.category.toLowerCase())
+          );
+          this.productsFilteredByCategory = productsFilteredByCategory;
+          this.productsFiltered = productsFilteredByCategory;
+          prices = this.productsFilteredByCategory.map((item) =>
+            item.discount ? item.discount.priceDiscount : item.price
           );
         } else {
-          this.filteredProducts = this.products;
+          prices = this.products.map((item) =>
+            item.discount ? item.discount.priceDiscount : item.price
+          );
+          this.productsFilteredByCategory = this.products;
+          this.productsFiltered = this.products;
         }
+        this.prices = prices;
+        this.minPrice = Math.min(...this.prices);
+        this.maxPrice = Math.max(...this.prices);
+        this.outputPrice = Math.max(...this.prices);
       }
     );
+  },
+  methods: {
+    onFilterHeaderClick(id) {
+      const index = this.filters.findIndex((item) => item.id === id);
+      this.filters[index].hidden = !this.filters[index].hidden;
+    },
+    onFilterChange({ value, filterBy }) {
+      if (
+        this.filterData.some(
+          (item) => item.value == value && item.filterBy == filterBy
+        )
+      ) {
+        this.filterData = this.filterData.filter(
+          (item) => !(item.value == value && item.filterBy == filterBy)
+        );
+      } else {
+        this.filterData = [...this.filterData, { value, filterBy }];
+      }
+      if (this.filterData.length > 0) {
+        this.productsFiltered = this.productsFilteredByCategory.filter((item) =>
+          this.filterData.some(
+            (filter) => item[filter.filterBy] === filter.value
+          )
+        );
+      } else {
+        this.productsFiltered = this.productsFilteredByCategory;
+      }
+      console.log(this.outputPrice, this.filterData);
+
+      // console.log(this.productsFilteredByCategory);
+    },
+    onPriceRangeChange(e) {
+      console.log(e.target.value);
+      this.outputPrice = e.target.value + 2;
+      this.productsFiltered = this.productsFilteredByCategory.filter((item) =>
+        item.discount
+          ? item.discount.priceDiscount <= this.outputPrice
+          : item.price <= this.outputPrice
+      );
+      console.log(this.outputPrice);
+    },
   },
   components: { ProductCard, LeftArrow },
 };
@@ -162,7 +295,7 @@ export default {
   padding-bottom: 0.8rem;
 }
 
-.filter,
+.filter-item-container,
 .filter-price {
   color: #050401;
   border-bottom: 1px solid #beb9bf;
@@ -183,9 +316,8 @@ export default {
   user-select: none;
 }
 
-.filter-items {
-  background-color: #ccc;
-  padding: 1rem;
+.filter-item-container {
+  margin-bottom: 8px;
 }
 
 .filter-price {
@@ -195,12 +327,13 @@ export default {
   gap: 0.8rem;
 }
 
-.filter-name {
-  text-transform: capitalize;
-}
-
-.filter-item-name {
+.filter-item {
   width: 100%;
+  text-transform: capitalize;
+  background-color: #ccc;
+  padding: 1rem;
+  display: block;
+  margin-bottom: 0.8rem;
 }
 
 #price-Input {
@@ -258,9 +391,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
-}
-.filter-item:last-child {
   margin-bottom: 0;
 }
 
