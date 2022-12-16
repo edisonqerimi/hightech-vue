@@ -165,6 +165,7 @@ export default {
       () => this.$route.params,
       (toParams) => {
         let prices = [];
+        this.filterData = [];
         if (toParams.category) {
           // document.title = toParams.category.toUpperCase();
           const productsFilteredByCategory = this.products.filter(
