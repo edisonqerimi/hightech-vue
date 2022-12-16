@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="product-buttons">
-        <router-link class="btn product-btn" :to="`product/${product.id}`">
+        <router-link class="btn product-btn" :to="`/product/${product.id}`">
           More info
         </router-link>
         <div :on-click="onAddToCart" class="btn btn-info product-btn">
