@@ -17,7 +17,10 @@
     <div class="product-filter shop-grid-item">
       <div class="filter-head">
         <div class="filter-title">Product Filter</div>
-        <LeftArrow class="filter-icon" />
+        <div class="fitler-clear-icon">
+          <div class="filter-clear" @click="onClearFilter">Clear</div>
+          <LeftArrow class="filter-icon" />
+        </div>
       </div>
       <div class="filter-body">
         <div class="filter-price">
@@ -45,7 +48,7 @@
             v-bind:key="filter.id"
           >
             <div class="filter-header" @click="onFilterHeaderClick(filter.id)">
-              <div class="filter-name">{{ filter.name }}</div>
+              <div>{{ filter.name }}</div>
               <LeftArrow />
             </div>
             <div
@@ -59,6 +62,12 @@
                 <input
                   :id="value"
                   type="checkbox"
+                  :checked="
+                    filterData.some(
+                      (item) =>
+                        item.filterBy == filter.name && item.value === value
+                    )
+                  "
                   @change="onFilterChange({ value, filterBy: filter.name })"
                   class="filter-check"
               /></label>
@@ -247,6 +256,10 @@ export default {
         });
       }
     },
+    onClearFilter() {
+      this.filterData = [];
+      this.productsFiltered = this.productsFilteredByCategory;
+    },
   },
   components: { ProductCard, LeftArrow },
 };
@@ -346,6 +359,7 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  text-transform: capitalize;
 }
 
 .filter-item-container {
@@ -433,9 +447,8 @@ export default {
 .filter-head {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0.2rem 0;
-  cursor: pointer;
 }
 
 .filter-title {
@@ -445,6 +458,20 @@ export default {
 
 .filter-icon {
   display: none;
+}
+
+.filter-clear {
+  cursor: pointer;
+  width: 45px;
+  justify-content: center;
+  display: flex;
+  padding: 0.4rem 0;
+}
+
+.fitler-clear-icon {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
 }
 /* ----------- PRODUCT-FILTER End ----------- */
 
