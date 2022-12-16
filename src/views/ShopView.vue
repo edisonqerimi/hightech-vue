@@ -97,6 +97,7 @@
 import ProductCard from "@/components/Shop/ProductCard.vue";
 import LeftArrow from "@/components/Icons/LeftArrowIcon.vue";
 import { products } from "./productsTemp";
+// import _ from "lodash";
 export default {
   data() {
     return {
@@ -131,13 +132,13 @@ export default {
           .includes(this.$route.params.category?.toLowerCase())
       );
       prices = productsFilteredByCategory.map((item) =>
-        item.discount ? item.discount.priceDiscount : item.price
+        item.discount.isDiscount ? item.discount.priceDiscount : item.price
       );
       this.productsFilteredByCategory = productsFilteredByCategory;
       this.productsFiltered = productsFilteredByCategory;
     } else {
       prices = this.products.map((item) =>
-        item.discount ? item.discount.priceDiscount : item.price
+        item.discount.isDiscount ? item.discount.priceDiscount : item.price
       );
       this.productsFilteredByCategory = this.products;
       this.productsFiltered = this.products;
@@ -159,11 +160,11 @@ export default {
           this.productsFilteredByCategory = productsFilteredByCategory;
           this.productsFiltered = productsFilteredByCategory;
           prices = this.productsFilteredByCategory.map((item) =>
-            item.discount ? item.discount.priceDiscount : item.price
+            item.discount.isDiscount ? item.discount.priceDiscount : item.price
           );
         } else {
           prices = this.products.map((item) =>
-            item.discount ? item.discount.priceDiscount : item.price
+            item.discount.isDiscount ? item.discount.priceDiscount : item.price
           );
           this.productsFilteredByCategory = this.products;
           this.productsFiltered = this.products;
@@ -192,28 +193,59 @@ export default {
       } else {
         this.filterData = [...this.filterData, { value, filterBy }];
       }
-      if (this.filterData.length > 0) {
-        this.productsFiltered = this.productsFilteredByCategory.filter((item) =>
-          this.filterData.some(
-            (filter) => item[filter.filterBy] === filter.value
-          )
-        );
-      } else {
-        this.productsFiltered = this.productsFilteredByCategory;
-      }
-      console.log(this.outputPrice, this.filterData);
 
-      // console.log(this.productsFilteredByCategory);
-    },
-    onPriceRangeChange(e) {
-      console.log(e.target.value);
-      this.outputPrice = e.target.value + 2;
       this.productsFiltered = this.productsFilteredByCategory.filter((item) =>
-        item.discount
+        item.discount.isDiscount
           ? item.discount.priceDiscount <= this.outputPrice
           : item.price <= this.outputPrice
       );
-      console.log(this.outputPrice);
+      if (this.filterData.length > 0) {
+        // this.productsFiltered = this.productsFiltered.filter((item) =>
+        //   this.filterData.some(
+        //     (filter) => item[filter.filterBy] === filter.value
+        //   )
+        // );
+        const filterBySet = [
+          ...new Set(this.filterData.map(({ filterBy }) => filterBy)),
+        ];
+        filterBySet.forEach((f) => {
+          this.productsFiltered = this.productsFiltered.filter((item) =>
+            this.filterData.some(
+              (filter) =>
+                item[filter.filterBy] === filter.value && filter.filterBy === f
+            )
+          );
+        });
+      }
+    },
+    onPriceRangeChange(e) {
+      console.log(e.target.value);
+      console.log(this.filterData);
+      this.outputPrice = e.target.value + 2;
+      this.productsFiltered = this.productsFilteredByCategory.filter((item) =>
+        item.discount.isDiscount
+          ? item.discount.priceDiscount <= this.outputPrice
+          : item.price <= this.outputPrice
+      );
+
+      if (this.filterData.length > 0) {
+        // this.productsFiltered = this.productsFiltered.filter((item) =>
+        //   this.filterData.some(
+        //     (filter) => item[filter.filterBy] === filter.value
+        //   )
+        // );
+        const filterBySet = [
+          ...new Set(this.filterData.map(({ filterBy }) => filterBy)),
+        ];
+        filterBySet.forEach((f) => {
+          this.productsFiltered = this.productsFiltered.filter((item) =>
+            this.filterData.some(
+              (filter) =>
+                item[filter.filterBy] === filter.value && filter.filterBy === f
+            )
+          );
+        });
+      }
     },
   },
   components: { ProductCard, LeftArrow },
