@@ -117,18 +117,7 @@ export default {
       minPrice: 0,
       maxPrice: 0,
       outputPrice: 0,
-      filters: [
-        {
-          id: 1,
-          name: "color",
-          values: [...new Set(products.map(({ color }) => color))],
-        },
-        {
-          id: 2,
-          name: "brand",
-          values: [...new Set(products.map(({ brand }) => brand))],
-        },
-      ],
+      filters: [],
     };
   },
   created() {
@@ -152,6 +141,22 @@ export default {
       this.productsFilteredByCategory = this.products;
       this.productsFiltered = this.products;
     }
+    this.filters = [
+      {
+        id: 1,
+        name: "color",
+        values: [
+          ...new Set(this.productsFilteredByCategory.map(({ color }) => color)),
+        ],
+      },
+      {
+        id: 2,
+        name: "brand",
+        values: [
+          ...new Set(this.productsFilteredByCategory.map(({ brand }) => brand)),
+        ],
+      },
+    ];
     this.prices = prices;
     this.minPrice = Math.min(...this.prices);
     this.maxPrice = Math.max(...this.prices);
@@ -178,6 +183,26 @@ export default {
           this.productsFilteredByCategory = this.products;
           this.productsFiltered = this.products;
         }
+        this.filters = [
+          {
+            id: 1,
+            name: "color",
+            values: [
+              ...new Set(
+                this.productsFilteredByCategory.map(({ color }) => color)
+              ),
+            ],
+          },
+          {
+            id: 2,
+            name: "brand",
+            values: [
+              ...new Set(
+                this.productsFilteredByCategory.map(({ brand }) => brand)
+              ),
+            ],
+          },
+        ];
         this.prices = prices;
         this.minPrice = Math.min(...this.prices);
         this.maxPrice = Math.max(...this.prices);
