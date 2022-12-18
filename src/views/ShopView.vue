@@ -81,10 +81,10 @@
         <form>
           <div class="select-control">
             <label for="sort">Sort:</label>
-            <select onchange="this.form.submit()" name="sort" id="sort">
+            <select @change="onSortChange" name="sort" class="sort">
               <option value="relevant">Relevant</option>
-              <option value="to-highest">Price lowest to highest</option>
-              <option value="to-lowest">Price highest to lowest</option>
+              <option value="ascendingPrice">Price lowest to highest</option>
+              <option value="descendingPrice">Price highest to lowest</option>
               <option value="az">A to Z</option>
               <option value="za">Z to A</option>
             </select>
@@ -118,6 +118,7 @@ export default {
       maxPrice: 0,
       outputPrice: 0,
       filters: [],
+      sortBy:"relevant"
     };
   },
   created() {
@@ -285,7 +286,48 @@ export default {
     onClearFilter() {
       this.filterData = [];
       this.productsFiltered = this.productsFilteredByCategory;
+      this.outputPrice = Math.max(...this.prices);
     },
+    onSortChange(e){
+      const value = e.target.value;
+      switch (value) {
+        case 'az':
+        this.productsFiltered.sort((a, b) => a.brand.localeCompare(b.brand));
+            break;
+        case 'za':
+            this.productsFiltered.sort((a, b) => b.brand.localeCompare(a.brand));
+            break;
+        case 'ascendingPrice':
+        this.productsFiltered.sort((a, b) => {
+                let aPrice = a.price;
+                let bPrice = b.price;
+                if (a.discount.isDiscount) {
+                    aPrice = a.discount.priceDiscount;
+                }
+                if (b.discount.isDiscount) {
+                    bPrice = b.discount.priceDiscount;
+                }
+                return bPrice - aPrice;
+            });
+            break;
+        case 'descendingPrice':
+        this.productsFiltered.sort((a, b) => {
+                let aPrice = a.price;
+                let bPrice = b.price;
+                if (a.discount.isDiscount) {
+                    aPrice = a.discount.priceDiscount;
+                }
+                if (b.discount.isDiscount) {
+                    bPrice = b.discount.priceDiscount;
+                }
+                return aPrice - bPrice;
+            });
+            break;
+        default:
+          
+            break;
+    }
+    }
   },
   components: { ProductCard, LeftArrow },
 };
@@ -526,7 +568,7 @@ export default {
 
 /* ----------- SORT Start ----------- */
 
-#sort {
+.sort {
   background: transparent;
   font-size: 1.5rem;
   padding: 1rem;
@@ -536,7 +578,7 @@ export default {
   justify-content: center;
 }
 
-#sort option {
+.sort option {
   background-color: #ddd;
 }
 
@@ -640,7 +682,7 @@ export default {
     width: 100%;
     justify-content: space-between;
   }
-  #sort {
+  .sort {
     width: 100%;
   }
   .product-image {
