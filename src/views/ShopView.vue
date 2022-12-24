@@ -454,7 +454,7 @@ export default {
 #price-Input {
   width: 100%;
   font-size: 1.6rem;
-  -webkit-appearance: none;
+  appearance: none;
   background: #307692;
   outline: none;
   height: 9px;
@@ -622,10 +622,13 @@ export default {
   .product-filter {
     position: sticky;
     z-index: 300;
-    top: 55px;
+    top: 0px;
     min-height: auto;
     width: 100%;
     padding: 0.4rem 1.2rem;
+  }
+  .filter-body{
+    display: none;
   }
   .filter-head {
     justify-content: space-between;
