@@ -45,11 +45,11 @@
       </div>
     </div>
     <div class="side-items">
-      <side-item to="/shop">All categories</side-item>
-      <side-item to="/desktop">Desktops</side-item>
-      <side-item to="/laptop">Laptops</side-item>
-      <side-item to="/smartphone">Smartphones</side-item>
-      <side-item to="/accessories">Accessories</side-item>
+      <side-item @click="onSideItemClick('/shop')">All categories</side-item>
+      <side-item @click="onSideItemClick('/shop/desktop')">Desktops</side-item>
+      <side-item @click="onSideItemClick('/shop/laptop')" >Laptops</side-item>
+      <side-item @click="onSideItemClick('/shop/smartphone')" >Smartphones</side-item>
+      <side-item @click="onSideItemClick('/shop/accessory')" >Accessories</side-item>
       <side-item to="#footer-start">Support</side-item>
     </div>
   </div>
@@ -75,6 +75,10 @@ export default {
     onLogout(e) {
       console.log(e);
     },
+    onSideItemClick(to){
+      this.$router.push({path:to})
+      this.onClose()
+    }
   },
   components: {
     RegisterIcon,

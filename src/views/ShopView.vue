@@ -93,6 +93,7 @@
       </div>
       <div class="products">
         <product-card
+          @click="()=>$router.push({ path: `/shop/product/${product.id}`})"
           v-for="product in productsFiltered"
           :product="product"
           v-bind:key="product.id"

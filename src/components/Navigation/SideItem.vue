@@ -1,13 +1,13 @@
 <template>
-    <router-link :to="to" class="side-row">
+    <div @click="onClick" class="side-row">
             <div><slot></slot></div>
-    </router-link>
+    </div>
 </template>
 
 <script>
     export default {
         props:{
-            to:String
+            onClick:Function
         }
     }
 </script>
@@ -20,6 +20,7 @@
     padding: 1rem;
     text-transform: uppercase;
     color: #050401;
+    cursor: pointer;
 }
 
 

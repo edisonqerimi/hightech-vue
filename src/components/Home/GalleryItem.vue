@@ -18,8 +18,8 @@ export default {
     props:{
         to:String,
         image:null,
-        normalPrice:String,
-        discountPrice:String
+        normalPrice:null,
+        discountPrice:null
     }
 }
 </script>

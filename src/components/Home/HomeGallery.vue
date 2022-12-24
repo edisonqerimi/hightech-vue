@@ -1,75 +1,50 @@
 <template>
     <section class="products-gallery">
         <gallery-item 
-            class="photo1"
-            discountPrice="699.99" 
-            normalPrice="1099.99" 
-            to="/details/1" :image="require('../../assets/images/hp-envy.png')"
+            v-for="item in galleryProducts"
+            v-bind:key="item.id"
+            :normalPrice="item.price" 
+            :discountPrice="item.discount.priceDiscount" 
+            :to="'/shop/product/'+item.id" :image="item.img"
         >
-            HP ENVY 17t-ch000
-        </gallery-item>
-        <gallery-item 
-            class="photo2" 
-            discountPrice="1150.49" 
-            normalPrice="1199.50" 
-            to="/details/2" :image="require('../../assets/images/iphone13promax.png')"
-        >
-            iPhone 13 Pro Max
-        </gallery-item>
-        <gallery-item 
-            class="photo3" 
-            discountPrice="279.99" 
-            normalPrice="349.99" 
-            to="/details/3" :image="require('../../assets/images/sony.png')"
-            >
-                Sony WH-1000XM4
+            {{ item.brand }} {{ item.model }}
         </gallery-item>
     </section>
 </template>
 
 <script>
 import GalleryItem from '@/components/Home/GalleryItem.vue';
+import { products } from "@/views/productsTemp";
 
 export default{
-    components: {  GalleryItem }
+    data(){
+        return{
+            galleryProducts:null
+        }
+    },
+    components: {  GalleryItem },
+    created(){
+        this.galleryProducts = products.slice(0,4);
+    }
 }
 </script>
 
 
 <style scoped>
 .products-gallery {
+    height: 90vh;
     display: grid;
-    grid-template-areas: 'first first second'
-        'first first third';
+    grid-template-columns: 1fr 1fr;
 
 }
 
-.photo1 {
-    height: 100vh;
-    grid-area: first;
-}
 
-.photo2 {
-    grid-area: second;
-}
-
-.photo3 {
-    grid-area: third;
-}
-
-@media screen and (max-width:1130px) {
-    .photo1 {
-        height: 50vw;
-    }
-}
 
 @media screen and (max-width:640px) {
 
 .products-gallery {
     grid-template-columns: 1fr;
-    grid-template-areas: 'first'
-        'second'
-        'third';
+    height: auto;
 }
 
 }
