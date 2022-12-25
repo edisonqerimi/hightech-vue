@@ -45,6 +45,7 @@ export default{
 .products-gallery {
     grid-template-columns: 1fr;
     height: auto;
+    gap: 1.2rem;
 }
 
 }
