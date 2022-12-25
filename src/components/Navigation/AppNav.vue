@@ -1,6 +1,6 @@
 <template>
     <NavBar :user="user" :onHamburgerClick="toggleSideBar"/>
-    <SideBar :user="user" :onClose="toggleSideBar" v-show="isSidebarActive" />
+    <SideBar :user="user" :onClose="onClose" v-show="isSidebarActive" />
 </template>
 
 <script>
@@ -25,6 +25,9 @@ export default {
     methods:{
         toggleSideBar(){
             this.isSidebarActive = !this.isSidebarActive
+        },
+        onClose(){
+            this.isSidebarActive = false
         },
         windowResizeHandler(){
             if(window.innerWidth>768&&this.isSidebarActive){

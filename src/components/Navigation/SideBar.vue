@@ -73,8 +73,7 @@ import { onClickOutside } from '@vueuse/core'
 export default {
   setup(props){
     const sidebarRef = ref(null)
-    
-    onClickOutside(sidebarRef,props.onClose())
+    onClickOutside(sidebarRef,props.onClose)
 
     return {sidebarRef}
   },
