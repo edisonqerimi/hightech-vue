@@ -17,7 +17,7 @@
           <div>Shop</div>
           <!--${bagIcon}-->
         </router-link>
-        <div class="nav-item">
+        <div @click="$router.push({hash:'#footer-start'})" class="nav-item">
           <div>Support</div>
           <!--${supportIcon}-->
         </div>

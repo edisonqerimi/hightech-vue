@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div class="sidebar" ref="sidebarRef">
     <div class="close" @click="onClose">
       <CloseIcon />
     </div>
@@ -50,7 +50,7 @@
       <side-item @click="onSideItemClick('/shop/laptop')" >Laptops</side-item>
       <side-item @click="onSideItemClick('/shop/smartphone')" >Smartphones</side-item>
       <side-item @click="onSideItemClick('/shop/accessory')" >Accessories</side-item>
-      <side-item to="#footer-start">Support</side-item>
+      <side-item @click="onSupportClick">Support</side-item>
     </div>
   </div>
 </template>
@@ -66,7 +66,18 @@ import LogoutIcon from "../Icons/LogoutIcon.vue";
 import SideItem from "./SideItem.vue";
 import AccountItem from "./AccountItem.vue";
 
+import {ref} from "vue"
+
+import { onClickOutside } from '@vueuse/core'
+
 export default {
+  setup(props){
+    const sidebarRef = ref(null)
+    
+    onClickOutside(sidebarRef,props.onClose())
+
+    return {sidebarRef}
+  },
   props: {
     onClose: Function,
     user: Object,
@@ -77,6 +88,10 @@ export default {
     },
     onSideItemClick(to){
       this.$router.push({path:to})
+      this.onClose()
+    },
+    onSupportClick(){
+      this.$router.push({hash:'#footer-start'});
       this.onClose()
     }
   },
