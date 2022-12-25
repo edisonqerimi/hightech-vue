@@ -4,12 +4,12 @@
       <CloseIcon />
     </div>
     <div class="side-title-container">
-      <router-link class="side-title" to="/">
+      <div class="side-title" @click="onSideItemClick('/')">
         <div class="nav-logo">
           <LogoIcon />
         </div>
         <div>HIGH TECH</div>
-      </router-link>
+      </div>
     </div>
     <form class="side-form search-form" action="./search.html">
       <input
@@ -20,11 +20,11 @@
     </form>
     <div>
       <div class="account-items-side" v-if="user">
-        <account-item to="/profile">
+        <account-item @click="onSideItemClick('/profile')">
           <template v-slot:icon><ProfileIcon /></template>
           Account
         </account-item>
-        <account-item to="/administration">
+        <account-item @click="onSideItemClick('/admin')">
           <template v-slot:icon><AdminIcon /></template>
           Admin
         </account-item>
@@ -162,6 +162,7 @@ export default {
   padding: 0.6rem;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .side-search {

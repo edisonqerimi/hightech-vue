@@ -1,5 +1,5 @@
 <template>
-     <div class='account-icon' @click="to?$router.push(to):null">
+     <div class='account-icon'>
                 <slot name="icon"></slot>
                 <div><slot></slot></div>
      </div>
@@ -8,8 +8,7 @@
 <script>
     export default {
         props:{
-            icon:HTMLElement,
-            to:String,
+            icon:HTMLElement
         }
     }
 </script>

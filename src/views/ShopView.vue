@@ -622,7 +622,7 @@ export default {
   .product-filter {
     position: sticky;
     z-index: 300;
-    top: 0px;
+    top: 55px;
     min-height: auto;
     width: 100%;
     padding: 0.4rem 1.2rem;

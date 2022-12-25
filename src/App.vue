@@ -1,17 +1,13 @@
 <!-- src/App.vue -->
 <template>
-    <div>
-      <header class="app-header">
-        <app-nav></app-nav>
-        <app-banner v-if="isBannerOpen" :onClose="onBannerClose"></app-banner>
-      </header>
+      <app-nav></app-nav>
+      <app-banner v-if="isBannerOpen" :onClose="onBannerClose"></app-banner>
       <main class="container-height">
         <router-view></router-view>
       </main>
       <footer>
       <app-footer></app-footer>
     </footer>
-    </div>
   </template>
   
   <script>

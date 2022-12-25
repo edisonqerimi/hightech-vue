@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <nav id="nav">
     <div @click="onHamburgerClick" class="hamburger show-sidebar">
       <HamburgerIcon />
     </div>
@@ -72,7 +72,7 @@
         <div class="cart-count hidden">0</div>
       </router-link>
     </div>
-  </div>
+  </nav>
 </template>
 
 <script>
